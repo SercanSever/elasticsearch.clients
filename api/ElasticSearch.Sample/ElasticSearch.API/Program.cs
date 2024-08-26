@@ -1,4 +1,6 @@
 using ElasticSearch.API.Extensions;
+using ElasticSearch.API.Repositories;
+using ElasticSearch.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddElastic(builder.Configuration);
+builder.Services.AddSingleton<ProductRepository>();
+builder.Services.AddSingleton<ProductService>();
 var app = builder.Build();
 
 

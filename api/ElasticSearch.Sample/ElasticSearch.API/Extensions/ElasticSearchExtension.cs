@@ -7,7 +7,7 @@ using Nest;
 
 namespace ElasticSearch.API.Extensions
 {
-   public static class ElasticSearch
+   public static class ElasticSearchExtension
    {
       public static void AddElastic(this IServiceCollection serviceColelction, IConfiguration configuration)
       {
