@@ -14,10 +14,40 @@ namespace ElasticSearch.API.Controllers
       {
          _productService = productService;
       }
-      [HttpPost]
+      [HttpPost("create")]
       public async Task<IActionResult> CreateProduct(ProductCreateDto request)
       {
          var response = await _productService.SaveAsync(request);
+         return CreateActionResult(response!);
+      }
+      [HttpGet("getall")]
+      public async Task<IActionResult> GetAllProducts()
+      {
+         var response = await _productService.GetAllAsync();
+         return CreateActionResult(response!);
+      }
+      [HttpGet("getbyid")]
+      public async Task<IActionResult> GetProductById(string id)
+      {
+         var response = await _productService.GetByIdAsync(id);
+         return CreateActionResult(response!);
+      }
+      [HttpDelete("delete")]
+      public async Task<IActionResult> DeleteProduct(string id)
+      {
+         var response = await _productService.DeleteAsync(id);
+         return CreateActionResult(response!);
+      }
+      [HttpDelete("deleteall")]
+      public async Task<IActionResult> DeleteAllProducts()
+      {
+         var response = await _productService.DeleteAllAsync();
+         return CreateActionResult(response!);
+      }
+      [HttpGet("indexexists")]
+      public async Task<IActionResult> IndexExists()
+      {
+         var response = await _productService.IndexExistsAsync();
          return CreateActionResult(response!);
       }
    }
