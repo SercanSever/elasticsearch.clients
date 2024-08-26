@@ -1,6 +1,5 @@
 using System.Net;
 using ElasticSearch.API.DTOs;
-using ElasticSearch.API.Models;
 using ElasticSearch.API.Repositories;
 
 namespace ElasticSearch.API.Services

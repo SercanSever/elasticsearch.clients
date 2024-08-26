@@ -11,7 +11,7 @@ namespace ElasticSearch.API.DTOs
             Name = Name,
             Price = Price,
             Stock = Stock,
-            Features = new ProductFeature
+            Feature = new ProductFeature
             {
                Width = Features.Width,
                Height = Features.Height,
