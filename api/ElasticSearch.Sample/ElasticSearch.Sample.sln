@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearch.API", "ElasticSearch.API\ElasticSearch.API.csproj", "{D6D729F9-EE50-4184-96CD-741677FEDAD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElasticSearch.API", "ElasticSearch.API\ElasticSearch.API.csproj", "{6DCD975B-7AE5-4B8D-BDDF-81C2C7C97979}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D6D729F9-EE50-4184-96CD-741677FEDAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6D729F9-EE50-4184-96CD-741677FEDAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6D729F9-EE50-4184-96CD-741677FEDAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6D729F9-EE50-4184-96CD-741677FEDAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DCD975B-7AE5-4B8D-BDDF-81C2C7C97979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DCD975B-7AE5-4B8D-BDDF-81C2C7C97979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DCD975B-7AE5-4B8D-BDDF-81C2C7C97979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DCD975B-7AE5-4B8D-BDDF-81C2C7C97979}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E043840E-AE09-48D3-B6BE-D3CC78949BCD}
+		SolutionGuid = {927D78B5-172F-45C4-9EA8-94EEB973EEAB}
 	EndGlobalSection
 EndGlobal
