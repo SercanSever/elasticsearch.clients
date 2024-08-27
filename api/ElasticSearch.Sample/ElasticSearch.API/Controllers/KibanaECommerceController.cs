@@ -28,5 +28,11 @@ namespace ElasticSearch.API.Controllers
          var response = await _kibanaECommerceService.GetCustomerByFirstNames(customerFirstNameList);
          return CreateActionResult(response);
       }
+      [HttpGet("getbyfullname")]
+      public async Task<IActionResult> GetByFullName(string customerFullNamePrefix)
+      {
+         var response = await _kibanaECommerceService.GetCustomerByFullName(customerFullNamePrefix);
+         return CreateActionResult(response);
+      }
    }
 }

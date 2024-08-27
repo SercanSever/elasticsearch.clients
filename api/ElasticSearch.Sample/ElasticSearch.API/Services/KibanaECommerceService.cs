@@ -21,7 +21,12 @@ namespace ElasticSearch.API.Services
       }
       public async Task<ResponseDto<List<KibanaECommerceDto>>> GetCustomerByFirstNames(List<string> customerFirstNameList)
       {
-         var result = await _kibanaECommerceRepository.GetCustomerByFirstNamesTerm(customerFirstNameList);
+         var result = await _kibanaECommerceRepository.GetCustomerByFirstNamesTerms(customerFirstNameList);
+         return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), new List<string>(), HttpStatusCode.OK);
+      }
+      public async Task<ResponseDto<List<KibanaECommerceDto>>> GetCustomerByFullName(string customerFullNamePrefix)
+      {
+         var result = await _kibanaECommerceRepository.GetCustomerByFullNamePrefix(customerFullNamePrefix);
          return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), new List<string>(), HttpStatusCode.OK);
       }
    }
