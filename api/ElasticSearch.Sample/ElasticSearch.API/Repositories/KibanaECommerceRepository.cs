@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.QueryDsl;
 using ElasticSearch.API.Models.ECommerceModel;
 
 namespace ElasticSearch.API.Repositories
@@ -12,9 +13,26 @@ namespace ElasticSearch.API.Repositories
       {
          _client = client;
       }
-      public async Task<ImmutableList<KibanaECommerce>> TermQuesry(string customerFirstName)
+      public async Task<ImmutableList<KibanaECommerce>> GetCustomerByFirstNameTerm(string customerFirstName)
       {
-         var result = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName).Query(q => q.Term(t => t.Field("customer_first_name.keyword"!).Value(customerFirstName))));
+         var result = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName).Query(q => q.Term(t => t.Field(f => f.CustomerFirstName.Suffix("keyword")).CaseInsensitive(true).Value(customerFirstName))));
+         foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!;
+         return result.Documents.ToImmutableList();
+      }
+      public async Task<ImmutableList<KibanaECommerce>> GetCustomerByFirstNamesTerm(List<string> customerFirstNameList)
+      {
+         var terms = new List<FieldValue>();
+         foreach (var customerFirstName in customerFirstNameList)
+         {
+            terms.Add(customerFirstName);
+         }
+
+         var termsQuery = new TermsQuery()
+         {
+            Field = "customer_first_name.keyword"!,
+            Term = new TermsQueryField(terms.AsReadOnly()),
+         };
+         var result = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName).Query(q => q.Terms(termsQuery)));
          foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!;
          return result.Documents.ToImmutableList();
       }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using ElasticSearch.API.DTOs;
-using ElasticSearch.API.Models.ECommerceModel;
 using ElasticSearch.API.Repositories;
 
 namespace ElasticSearch.API.Services
@@ -21,7 +16,12 @@ namespace ElasticSearch.API.Services
       }
       public async Task<ResponseDto<List<KibanaECommerceDto>>> GetCustomerByFirstName(string customerFirstName)
       {
-         var result = await _kibanaECommerceRepository.TermQuesry(customerFirstName);
+         var result = await _kibanaECommerceRepository.GetCustomerByFirstNameTerm(customerFirstName);
+         return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), new List<string>(), HttpStatusCode.OK);
+      }
+      public async Task<ResponseDto<List<KibanaECommerceDto>>> GetCustomerByFirstNames(List<string> customerFirstNameList)
+      {
+         var result = await _kibanaECommerceRepository.GetCustomerByFirstNamesTerm(customerFirstNameList);
          return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), new List<string>(), HttpStatusCode.OK);
       }
    }
