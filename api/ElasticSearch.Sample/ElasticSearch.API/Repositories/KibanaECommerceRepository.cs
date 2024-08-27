@@ -110,5 +110,54 @@ namespace ElasticSearch.API.Repositories
          foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
          return [.. response.Documents];
       }
+      public async Task<ImmutableList<KibanaECommerce>> GetByCategoryMatchBoolPrefix(string categoryName)
+      {
+         var response = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName)
+        .Size(1000)
+        .Query(q => q
+        .MatchBoolPrefix(m => m
+        .Field(f => f.Category)
+        .Query(categoryName))));
+         if (!response.IsValidResponse) return [];
+         foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
+         return [.. response.Documents];
+      }
+      public async Task<ImmutableList<KibanaECommerce>> GetByCustomerFullNameMatchPhrase(string customerFullName)
+      {
+         var response = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName)
+        .Size(1000)
+        .Query(q => q
+        .MatchPhrase(m => m
+        .Field(f => f.CustomerFullName)
+        .Query(customerFullName))));
+         if (!response.IsValidResponse) return [];
+         foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
+         return [.. response.Documents];
+      }
+      public async Task<ImmutableList<KibanaECommerce>> GetByCustomerCompoundQuery(string customerFirstName, string customerLastName)
+      {
+         var response = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName)
+        .Size(1000)
+        .Query(q => q.Bool(b => b
+        .Must(m => m.Match(m => m.Field(f => f.CustomerFirstName).Query(customerFirstName)))
+        .Should(s => s.Term(t => t.Field(f => f.CustomerLastName).Value(customerLastName)))
+        .Filter(f => f.Range(r => r.NumberRange(nr => nr.Field(f => f.TaxfulTotalPrice).Gt(25)))))));
+         if (!response.IsValidResponse) return [];
+         foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
+         return [.. response.Documents];
+      }
+      public async Task<ImmutableList<KibanaECommerce>> GetByMultiMatch(string name)
+      {
+         var response = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName)
+        .Size(1000)
+        .Query(q => q
+        .MultiMatch(m => m
+        .Fields(new Field("customer_first_name")
+        .And(new Field("customer_last_name"))
+        .And(new Field("customer_full_name"))).Query(name))));
+         if (!response.IsValidResponse) return [];
+         foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
+         return [.. response.Documents];
+      }
    }
 }

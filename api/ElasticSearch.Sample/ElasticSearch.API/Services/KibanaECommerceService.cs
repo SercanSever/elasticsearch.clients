@@ -64,5 +64,29 @@ namespace ElasticSearch.API.Services
          var result = await _kibanaECommerceRepository.GetByCategoryMatch(categoryName);
          return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), [], HttpStatusCode.OK);
       }
+      public async Task<ResponseDto<List<KibanaECommerceDto>>> GetByCategoryMatchBoolPrefix(string categoryName)
+      {
+         _logger.LogInformation("GetByCategory method called");
+         var result = await _kibanaECommerceRepository.GetByCategoryMatchBoolPrefix(categoryName);
+         return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), [], HttpStatusCode.OK);
+      }
+      public async Task<ResponseDto<List<KibanaECommerceDto>>> GetByCustomerFullNameMatchPhrase(string customerFullName)
+      {
+         _logger.LogInformation("GetByCategory method called");
+         var result = await _kibanaECommerceRepository.GetByCustomerFullNameMatchPhrase(customerFullName);
+         return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), [], HttpStatusCode.OK);
+      }
+      public async Task<ResponseDto<List<KibanaECommerceDto>>> GetByCustomerCompoundQuery(string customerFirstName, string customerLastName)
+      {
+         _logger.LogInformation("GetByCustomerCompoundQuery method called");
+         var result = await _kibanaECommerceRepository.GetByCustomerCompoundQuery(customerFirstName, customerLastName);
+         return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), [], HttpStatusCode.OK);
+      }
+      public async Task<ResponseDto<List<KibanaECommerceDto>>> GetByMultiMatch(string name)
+      {
+         _logger.LogInformation("GetByCustomerCompoundQuery method called");
+         var result = await _kibanaECommerceRepository.GetByMultiMatch(name);
+         return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), [], HttpStatusCode.OK);
+      }
    }
 }

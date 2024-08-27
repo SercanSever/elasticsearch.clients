@@ -70,5 +70,29 @@ namespace ElasticSearch.API.Controllers
          var response = await _kibanaECommerceService.GetByCategoryMatch(category);
          return CreateActionResult(response);
       }
+      [HttpGet("getbycategorymatchbool")]
+      public async Task<IActionResult> GetByCategoryMatchBoolPrefix(string category)
+      {
+         var response = await _kibanaECommerceService.GetByCategoryMatchBoolPrefix(category);
+         return CreateActionResult(response);
+      }
+      [HttpGet("getbycustomerfullname")]
+      public async Task<IActionResult> GetByCustomerFullNameMatchPhrase(string customerFullName)
+      {
+         var response = await _kibanaECommerceService.GetByCustomerFullNameMatchPhrase(customerFullName);
+         return CreateActionResult(response);
+      }
+      [HttpGet("getByCustomerCompoundQuery")]
+      public async Task<IActionResult> GetByCustomerCompoundQuery(string customerFullName, string customerFirstName)
+      {
+         var response = await _kibanaECommerceService.GetByCustomerCompoundQuery(customerFullName, customerFirstName);
+         return CreateActionResult(response);
+      }
+      [HttpGet("getbymultimatch")]
+      public async Task<IActionResult> GetByMultiMatch(string search)
+      {
+         var response = await _kibanaECommerceService.GetByMultiMatch(search);
+         return CreateActionResult(response);
+      }
    }
 }
