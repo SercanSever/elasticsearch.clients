@@ -32,7 +32,7 @@ namespace ElasticSearch.API.Services
          if (response == null) return ResponseDto<ProductDto>.Fail(new List<string> { "Product not found" }, HttpStatusCode.NotFound);
          if (!response.IsSuccess())
          {
-            _logger.LogError("An error occurred while getting the product: {Error}", response.ElasticsearchServerError!.Error.Reason);
+            _logger.LogError("An error occurred while getting the product: {Error}", response.TryGetOriginalException(out Exception? ex));
             return ResponseDto<ProductDto>.Fail(new List<string> { "An error occurred while getting the product" }, HttpStatusCode.InternalServerError);
          }
          return ResponseDto<ProductDto>.Success(response.Source!.CreateDto(), new List<string>(), HttpStatusCode.OK);
@@ -43,7 +43,7 @@ namespace ElasticSearch.API.Services
          if (!response.IsSuccess() && response.Result == Elastic.Clients.Elasticsearch.Result.NotFound) return ResponseDto<bool>.Fail(new List<string> { "Product not found" }, HttpStatusCode.NotFound);
          if (!response.IsSuccess())
          {
-            _logger.LogError("An error occurred while updating the product: {Error}", response.ElasticsearchServerError!.Error.Reason);
+            _logger.LogError("An error occurred while updating the product: {Error}", response.TryGetOriginalException(out Exception? ex));
             return ResponseDto<bool>.Fail(new List<string> { "An error occurred while updating the product" }, HttpStatusCode.InternalServerError);
          }
          return ResponseDto<bool>.Success(response.IsSuccess(), new List<string>(), HttpStatusCode.OK);
@@ -55,7 +55,7 @@ namespace ElasticSearch.API.Services
          if (!response.IsSuccess() && response.Result == Elastic.Clients.Elasticsearch.Result.NotFound) return ResponseDto<bool>.Fail(new List<string> { "Product not found" }, HttpStatusCode.NotFound);
          if (!response.IsSuccess())
          {
-            _logger.LogError("An error occurred while deleting the product: {Error}", response.ElasticsearchServerError!.Error.Reason);
+            _logger.LogError("An error occurred while deleting the product: {Error}", response.TryGetOriginalException(out Exception? ex));
             return ResponseDto<bool>.Fail(new List<string> { "An error occurred while deleting the product" }, HttpStatusCode.InternalServerError);
          }
          return ResponseDto<bool>.Success(response.IsSuccess(), new List<string>(), HttpStatusCode.OK);
@@ -66,7 +66,7 @@ namespace ElasticSearch.API.Services
          if (response.Total == 0) return ResponseDto<bool>.Fail(new List<string> { "No products found" }, HttpStatusCode.NotFound);
          if (!response.IsSuccess())
          {
-            _logger.LogError("An error occurred while deleting all products: {Error}", response.ElasticsearchServerError!.Error.Reason);
+            _logger.LogError("An error occurred while deleting all products: {Error}", response.TryGetOriginalException(out Exception? ex));
             return ResponseDto<bool>.Fail(new List<string> { "An error occurred while deleting all products" }, HttpStatusCode.InternalServerError);
          }
          return ResponseDto<bool>.Success(response.IsSuccess(), new List<string>(), HttpStatusCode.OK);
