@@ -15,7 +15,7 @@ namespace ElasticSearch.API.DTOs
             {
                Width = Features.Width,
                Height = Features.Height,
-               Color = (EColor)Features.Color
+               Color = (EColor)int.Parse(Features.Color)
             }
          };
       }
