@@ -7,7 +7,7 @@ services:
       - xpack.security.enabled=false
       - "discovery.type=single-node"
       - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=DkIedPPSCb
+      - ELASTIC_PASSWORD=changeme
     networks:
       - es-net
     ports:
