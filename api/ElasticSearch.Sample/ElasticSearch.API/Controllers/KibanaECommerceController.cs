@@ -64,5 +64,11 @@ namespace ElasticSearch.API.Controllers
          var response = await _kibanaECommerceService.GetByCustomerNameFuzzy(customerFirstName);
          return CreateActionResult(response);
       }
+      [HttpGet("getbycategory")]
+      public async Task<IActionResult> GetByCategory(string category)
+      {
+         var response = await _kibanaECommerceService.GetByCategoryMatch(category);
+         return CreateActionResult(response);
+      }
    }
 }

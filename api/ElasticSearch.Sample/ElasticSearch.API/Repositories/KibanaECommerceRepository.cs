@@ -98,5 +98,17 @@ namespace ElasticSearch.API.Repositories
          foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
          return [.. response.Documents];
       }
+      public async Task<ImmutableList<KibanaECommerce>> GetByCategoryMatch(string categoryName)
+      {
+         var response = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName)
+        .Size(1000)
+        .Query(q => q
+        .Match(m => m
+        .Field(f => f.Category)
+        .Query(categoryName))));
+         if (!response.IsValidResponse) return [];
+         foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
+         return [.. response.Documents];
+      }
    }
 }
