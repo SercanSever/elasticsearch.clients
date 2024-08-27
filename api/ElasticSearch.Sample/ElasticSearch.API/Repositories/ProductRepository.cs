@@ -4,14 +4,11 @@ using ElasticSearch.API.Models;
 
 namespace ElasticSearch.API.Repositories
 {
-   public class ProductRepository
+   public class ProductRepository(ElasticsearchClient client)
    {
       private const string IndexName = "products";
-      private readonly ElasticsearchClient _client;
-      public ProductRepository(ElasticsearchClient client)
-      {
-         _client = client;
-      }
+      private readonly ElasticsearchClient _client = client;
+
       public async Task<Product?> SaveAsync(Product product)
       {
          product.Created = DateTime.Now;

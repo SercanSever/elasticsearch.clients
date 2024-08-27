@@ -6,14 +6,10 @@ namespace ElasticSearch.API.Controllers
 {
    [ApiController]
    [Route("api/[controller]")]
-   public class ProductsController : BaseController
+   public class ProductsController(ProductService productService) : BaseController
    {
-      private readonly ProductService _productService;
+      private readonly ProductService _productService = productService;
 
-      public ProductsController(ProductService productService)
-      {
-         _productService = productService;
-      }
       [HttpPost("create")]
       public async Task<IActionResult> CreateProduct(ProductCreateDto request)
       {

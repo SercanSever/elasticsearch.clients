@@ -46,5 +46,23 @@ namespace ElasticSearch.API.Controllers
          var response = await _kibanaECommerceService.GetAll();
          return CreateActionResult(response);
       }
+      [HttpGet("getallwithpagination")]
+      public async Task<IActionResult> GetAllWithPagination(int page, int pageSize)
+      {
+         var response = await _kibanaECommerceService.GetAllWithPagination(page, pageSize);
+         return CreateActionResult(response);
+      }
+      [HttpGet("getwithwildcard")]
+      public async Task<IActionResult> GetWithWildCard(string search)
+      {
+         var response = await _kibanaECommerceService.GetWithWildCard(search);
+         return CreateActionResult(response);
+      }
+      [HttpGet("getwithfuzzy")]
+      public async Task<IActionResult> GetWithFuzzy(string customerFirstName)
+      {
+         var response = await _kibanaECommerceService.GetByCustomerNameFuzzy(customerFirstName);
+         return CreateActionResult(response);
+      }
    }
 }
