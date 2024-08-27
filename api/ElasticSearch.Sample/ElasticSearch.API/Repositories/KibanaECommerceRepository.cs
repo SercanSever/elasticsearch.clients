@@ -53,5 +53,26 @@ namespace ElasticSearch.API.Repositories
          foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
          return response.Documents.ToImmutableList();
       }
+      public async Task<ImmutableList<KibanaECommerce>> GetProductsByTexfulTotalPriceRange(double minPrice, double maxPrice)
+      {
+         var response = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName)
+           .Query(q => q
+           .Range(r => r
+           .NumberRange(nr => nr
+           .Field(f => f.TaxfulTotalPrice)
+           .Gte(minPrice)
+           .Lte(maxPrice)))));
+         if (!response.IsValidResponse) return ImmutableList<KibanaECommerce>.Empty;
+         foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
+         return response.Documents.ToImmutableList();
+      }
+      public async Task<ImmutableList<KibanaECommerce>> GetAll()
+      {
+         var response = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName)
+            .Size(100));
+         if (!response.IsValidResponse) return ImmutableList<KibanaECommerce>.Empty;
+         foreach (var hit in response.Hits) hit.Source!.Id = hit.Id!;
+         return response.Documents.ToImmutableList();
+      }
    }
 }

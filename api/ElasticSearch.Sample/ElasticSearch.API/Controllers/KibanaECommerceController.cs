@@ -34,5 +34,17 @@ namespace ElasticSearch.API.Controllers
          var response = await _kibanaECommerceService.GetCustomerByFullName(customerFullNamePrefix);
          return CreateActionResult(response);
       }
+      [HttpGet("getbypricerange")]
+      public async Task<IActionResult> GetByPriceRange(double minPrice, double maxPrice)
+      {
+         var response = await _kibanaECommerceService.GetProductsByTotalPriceRange(minPrice, maxPrice);
+         return CreateActionResult(response);
+      }
+      [HttpGet("getall")]
+      public async Task<IActionResult> GetAll()
+      {
+         var response = await _kibanaECommerceService.GetAll();
+         return CreateActionResult(response);
+      }
    }
 }

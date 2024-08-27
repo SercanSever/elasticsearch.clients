@@ -20,11 +20,13 @@ namespace ElasticSearch.API.Models.ECommerceModel
       public int OrderId { get; set; }
       [JsonPropertyName("order_date")]
       public DateTime OrderDate { get; set; }
+      [JsonPropertyName("taxful_total_price")]
+      public double TaxfulTotalPrice { get; set; }
       [JsonPropertyName("products")]
       public KibanaECommerceProduct[] Products { get; set; } = null!;
       public KibanaECommerceDto CreateDto()
       {
-         return new KibanaECommerceDto(Id, CustomerFirstName, CustomerLastName, CustomerFullName, Category, OrderId, OrderDate, Products.Select(p => new KibanaECommerceProductDto(p.ProductId, p.ProductName!)).ToArray());
+         return new KibanaECommerceDto(Id, CustomerFirstName, CustomerLastName, CustomerFullName, Category, OrderId, OrderDate, TaxfulTotalPrice, Products.Select(p => new KibanaECommerceProductDto(p.ProductId, p.ProductName!)).ToArray());
       }
    }
    public class KibanaECommerceProduct

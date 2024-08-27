@@ -29,5 +29,16 @@ namespace ElasticSearch.API.Services
          var result = await _kibanaECommerceRepository.GetCustomerByFullNamePrefix(customerFullNamePrefix);
          return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), new List<string>(), HttpStatusCode.OK);
       }
+      public async Task<ResponseDto<List<KibanaECommerceDto>>> GetProductsByTotalPriceRange(double minPrice, double maxPrice)
+      {
+         var result = await _kibanaECommerceRepository.GetProductsByTexfulTotalPriceRange(minPrice, maxPrice);
+         return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), new List<string>(), HttpStatusCode.OK);
+      }
+
+      public async Task<ResponseDto<List<KibanaECommerceDto>>> GetAll()
+      {
+         var result = await _kibanaECommerceRepository.GetAll();
+         return ResponseDto<List<KibanaECommerceDto>>.Success(result.Select(p => p!.CreateDto()).ToList(), new List<string>(), HttpStatusCode.OK);
+      }
    }
 }
