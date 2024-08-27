@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Elastic.Clients.Elasticsearch.MachineLearning;
+using ElasticSearch.API.DTOs;
 
 namespace ElasticSearch.API.Models.ECommerceModel
 {
@@ -19,13 +21,17 @@ namespace ElasticSearch.API.Models.ECommerceModel
       [JsonPropertyName("order_date")]
       public DateTime OrderDate { get; set; }
       [JsonPropertyName("products")]
-      public Product[] Products { get; set; } = null!;
+      public KibanaECommerceProduct[] Products { get; set; } = null!;
+      public KibanaECommerceDto CreateDto()
+      {
+         return new KibanaECommerceDto(Id, CustomerFirstName, CustomerLastName, CustomerFullName, Category, OrderId, OrderDate, Products.Select(p => new KibanaECommerceProductDto(p.ProductId, p.ProductName!)).ToArray());
+      }
    }
-   public class Product
+   public class KibanaECommerceProduct
    {
       [JsonPropertyName("product_id")]
-      public string ProductId { get; set; } = null!;
+      public long ProductId { get; set; }
       [JsonPropertyName("product_name")]
-      public string ProductName { get; set; } = null!;
+      public string? ProductName { get; set; }
    }
 }

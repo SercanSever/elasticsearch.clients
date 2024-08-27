@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
-using System.Threading.Tasks;
 using Elastic.Clients.Elasticsearch;
 using ElasticSearch.API.Models.ECommerceModel;
 
@@ -18,7 +14,8 @@ namespace ElasticSearch.API.Repositories
       }
       public async Task<ImmutableList<KibanaECommerce>> TermQuesry(string customerFirstName)
       {
-         var result = await _client.SearchAsync<KibanaECommerce>(x => x.Query(q => q.Term(t => t.Field("customer_first_name.keyword"!).Value(customerFirstName))));
+         var result = await _client.SearchAsync<KibanaECommerce>(s => s.Index(IndexName).Query(q => q.Term(t => t.Field("customer_first_name.keyword"!).Value(customerFirstName))));
+         foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!;
          return result.Documents.ToImmutableList();
       }
    }
