@@ -1,3 +1,4 @@
+using ElasticSearch.API.DTOs;
 using ElasticSearch.API.Models;
 using Nest;
 
@@ -26,28 +27,27 @@ namespace ElasticSearch.API.Repositories
          foreach (var hit in response.Hits) hit.Source.Id = hit.Id;
          return response.Documents;
       }
-      public async Task<Product?> GetByIdAsync(string id)
+      public async Task<GetResponse<Product>?> GetByIdAsync(string id)
       {
          var response = await _client.GetAsync<Product>(id, idx => idx.Index(_indexName));
          if (!response.IsValid) return null;
          response.Source.Id = response.Id;
-         return response.Source;
+         return response;
       }
-      public async Task<bool> UpdateAsync(Product product)
+      public async Task<UpdateResponse<Product>> UpdateAsync(ProductUpdateDto product)
       {
-         product.Updated = DateTime.Now;
-         var response = await _client.UpdateAsync<Product>(product.Id, u => u.Index(_indexName).Doc(product));
-         return response.IsValid;
+         var response = await _client.UpdateAsync<Product, ProductUpdateDto>(product.Id, idx => idx.Index(_indexName).Doc(product));
+         return response;
       }
-      public async Task<bool> DeleteAsync(string id)
+      public async Task<DeleteResponse> DeleteAsync(string id)
       {
          var response = await _client.DeleteAsync<Product>(id, idx => idx.Index(_indexName));
-         return response.IsValid;
+         return response;
       }
-      public async Task<bool> DeleteAllAsync()
+      public async Task<DeleteByQueryResponse> DeleteAllAsync()
       {
          var response = await _client.DeleteByQueryAsync<Product>(q => q.Index(_indexName).Query(q => q.MatchAll()));
-         return response.IsValid;
+         return response;
       }
       public async Task<bool> IndexExistsAsync()
       {

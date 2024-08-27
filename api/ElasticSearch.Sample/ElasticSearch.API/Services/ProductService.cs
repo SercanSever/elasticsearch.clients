@@ -1,15 +1,18 @@
 using System.Net;
 using ElasticSearch.API.DTOs;
 using ElasticSearch.API.Repositories;
+using Nest;
 
 namespace ElasticSearch.API.Services
 {
    public class ProductService
    {
+      private readonly ILogger<ProductService> _logger;
       private readonly ProductRepository _productRepository;
-      public ProductService(ProductRepository productRepository)
+      public ProductService(ProductRepository productRepository, ILogger<ProductService> logger)
       {
          _productRepository = productRepository;
+         _logger = logger;
       }
       public async Task<ResponseDto<ProductDto>?> SaveAsync(ProductCreateDto request)
       {
@@ -27,18 +30,46 @@ namespace ElasticSearch.API.Services
       {
          var response = await _productRepository.GetByIdAsync(id);
          if (response == null) return ResponseDto<ProductDto>.Fail(new List<string> { "Product not found" }, HttpStatusCode.NotFound);
-         return ResponseDto<ProductDto>.Success(response.CreateDto(), new List<string>(), HttpStatusCode.OK);
+         if (!response.IsValid)
+         {
+            _logger.LogError("An error occurred while getting the product: {Error}", response.ServerError.Error.Reason);
+            return ResponseDto<ProductDto>.Fail(new List<string> { "An error occurred while getting the product" }, HttpStatusCode.InternalServerError);
+         }
+         return ResponseDto<ProductDto>.Success(response.Source.CreateDto(), new List<string>(), HttpStatusCode.OK);
+      }
+      public async Task<ResponseDto<bool>> UpdateAsync(ProductUpdateDto request)
+      {
+         var response = await _productRepository.UpdateAsync(request);
+         if (!response.IsValid && response.Result == Result.NotFound) return ResponseDto<bool>.Fail(new List<string> { "Product not found" }, HttpStatusCode.NotFound);
+         if (!response.IsValid)
+         {
+            _logger.LogError("An error occurred while updating the product: {Error}", response.ServerError.Error.Reason);
+            return ResponseDto<bool>.Fail(new List<string> { "An error occurred while updating the product" }, HttpStatusCode.InternalServerError);
+         }
+         return ResponseDto<bool>.Success(response.IsValid, new List<string>(), HttpStatusCode.OK);
       }
 
       public async Task<ResponseDto<bool>> DeleteAsync(string id)
       {
          var response = await _productRepository.DeleteAsync(id);
-         return ResponseDto<bool>.Success(response, new List<string>(), HttpStatusCode.OK);
+         if (!response.IsValid && response.Result == Result.NotFound) return ResponseDto<bool>.Fail(new List<string> { "Product not found" }, HttpStatusCode.NotFound);
+         if (!response.IsValid)
+         {
+            _logger.LogError("An error occurred while deleting the product: {Error}", response.ServerError.Error.Reason);
+            return ResponseDto<bool>.Fail(new List<string> { "An error occurred while deleting the product" }, HttpStatusCode.InternalServerError);
+         }
+         return ResponseDto<bool>.Success(response.IsValid, new List<string>(), HttpStatusCode.OK);
       }
       public async Task<ResponseDto<bool>> DeleteAllAsync()
       {
          var response = await _productRepository.DeleteAllAsync();
-         return ResponseDto<bool>.Success(response, new List<string>(), HttpStatusCode.OK);
+         if (response.Total == 0) return ResponseDto<bool>.Fail(new List<string> { "No products found" }, HttpStatusCode.NotFound);
+         if (!response.IsValid)
+         {
+            _logger.LogError("An error occurred while deleting all products: {Error}", response.ServerError.Error.Reason);
+            return ResponseDto<bool>.Fail(new List<string> { "An error occurred while deleting all products" }, HttpStatusCode.InternalServerError);
+         }
+         return ResponseDto<bool>.Success(response.IsValid, new List<string>(), HttpStatusCode.OK);
       }
       public async Task<ResponseDto<bool>> IndexExistsAsync()
       {

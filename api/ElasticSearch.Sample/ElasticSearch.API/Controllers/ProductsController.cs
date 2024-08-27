@@ -21,6 +21,7 @@ namespace ElasticSearch.API.Controllers
          return CreateActionResult(response!);
       }
       [HttpGet("getall")]
+      [ResponseCache(Duration = 60)]
       public async Task<IActionResult> GetAllProducts()
       {
          var response = await _productService.GetAllAsync();
@@ -30,6 +31,12 @@ namespace ElasticSearch.API.Controllers
       public async Task<IActionResult> GetProductById(string id)
       {
          var response = await _productService.GetByIdAsync(id);
+         return CreateActionResult(response!);
+      }
+      [HttpPut("update")]
+      public async Task<IActionResult> UpdateProduct(ProductUpdateDto request)
+      {
+         var response = await _productService.UpdateAsync(request);
          return CreateActionResult(response!);
       }
       [HttpDelete("delete")]
